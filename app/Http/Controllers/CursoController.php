@@ -31,7 +31,7 @@ class CursoController extends Controller
     }
 
     public function show(Curso $curso){ /* Ahora ya no es necesario recibir el id por parametro. Se recibe el objeto */
-        
+        $this->imprimirTicket($curso);
         return view("cursos.show",['curso' => $curso]);
     }
 
@@ -43,7 +43,7 @@ class CursoController extends Controller
     public function update(StoreCurso $request, Curso $curso){
 
         $curso->update($request->all());
-        
+        $this->imprimirTicket($curso);
         return redirect()->route('cursos.show', $curso);
     }
 
@@ -59,24 +59,29 @@ class CursoController extends Controller
         $nombreImpresora = "EPSON TM-T20II Receipt";
         $conector = new WindowsPrintConnector($nombreImpresora);
         $impresora = new Printer($conector);
-        //dd(utf8_decode('Ã¡'));
-        $impresora->setJustification(Printer::JUSTIFY_CENTER);
-        $impresora->setTextSize(1, 1);
-        //dd(utf8_encode("a-b-c-d-e-f-g-h-i-j-l-m-n-ñ-o-p-q-r-s-t-u-v-w-x-y-z \n A-B-C-D-E-F-G-H-I-J-K-L-M-N-Ñ-O-P-Q-R-D-T-U-V-W-X-Y-Z\ná-é-í-ó-ú\nÁ-É-Í-Ó-Ú\n") );
-        //$impresora->text(utf8_encode("a-b-c-d-e-f-g-h-i-j-l-m-n-ñ-o-p-q-r-s-t-u-v-w-x-y-z \n A-B-C-D-E-F-G-H-I-J-K-L-M-N-Ñ-O-P-Q-R-D-T-U-V-W-X-Y-Z\ná-é-í-ó-ú\nÁ-É-Í-Ó-Ú\n") );
-        $impresora->text("Ã----------------- Ticketera ------------------Ã\n\n\n"); // Imprimo un caracter latino que no aparecerá por problemas de codificación, solo lo utilizaré para que los demas sí aparezcan correctamente con acentos y la ñÑ
         
-        $impresora->setJustification(Printer::JUSTIFY_LEFT);
-        $impresora->text("Curso: " . $curso->name . "\n");
-        $impresora->text("Categoría: " . $curso->categoria . "\n");
-        $impresora->text("Descripción: " . $curso->descripcion . "\n");
-        $impresora->feed(2);
-        $impresora->setJustification(Printer::JUSTIFY_CENTER);
-        $impresora->text("------------------------------------------------\n");
-        $impresora->text("       www.internet-facilito.blogspot.com       ");
-        $impresora->feed(5);
-        $impresora->cut();
-        $impresora->close();
+            $impresora->setJustification(Printer::JUSTIFY_CENTER);
+            $impresora->setFont(Printer::FONT_B);
+        $impresora->text("_ _ _ _ _ _ _ _ _ _ _ _ _ Tıcketera _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");//63 caracteres para font B
+            $impresora->setJustification(Printer::JUSTIFY_LEFT);
+            $impresora->setEmphasis(true);
+        $impresora->text("Curso:       ");
+            $impresora->setEmphasis(false);
+        $impresora->text($curso->name . "\n");
+            $impresora->setEmphasis(true);
+        $impresora->text("Categoría:   ");
+            $impresora->setEmphasis(false);
+        $impresora->text($curso->categoria . "\n");
+            $impresora->setEmphasis(true);
+        $impresora->text("Descripción: ");
+            $impresora->setEmphasis(false);
+        $impresora->text($curso->descripcion . "\n");
+            $impresora->setJustification(Printer::JUSTIFY_CENTER);
+        $impresora->text("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n");//63 caracteres para font B
+        $impresora->text("www.internet-facilito.blogspot.com\n");
+            $impresora->cut();
+            $impresora->close();
 
     }
+
 }
