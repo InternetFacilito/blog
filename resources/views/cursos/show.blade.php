@@ -19,6 +19,7 @@
         @method('delete')
         @csrf
         <button type="submit">Eliminar Curso</button>
+        <button><a href="{{route('cursos.imprimirTicket', $curso)}}">Imprimir Ticket</a></button>
     </form>
 
 

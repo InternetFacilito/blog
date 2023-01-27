@@ -22,3 +22,6 @@ Route::controller(CursoController::class)->group(function(){
 Route::resource('cursos', CursoController::class);//->parameters(['asignaturas'=>'curso'])->names('cursos');
 
 Route::view('nosotros','nosotros')->name('nosotros');
+
+
+Route::get('cursos/{curso}/imprimirTicket',[ CursoController::class, 'imprimirTicket'])->name('cursos.imprimirTicket');

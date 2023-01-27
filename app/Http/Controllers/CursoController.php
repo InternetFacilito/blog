@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
 use App\Http\Requests\StoreCurso;
-use Mike42\Escpos\CapabilityProfile;
 
 class CursoController extends Controller
 {
@@ -32,7 +31,7 @@ class CursoController extends Controller
     }
 
     public function show(Curso $curso){ /* Ahora ya no es necesario recibir el id por parametro. Se recibe el objeto */
-        $this->imprimirTicket($curso);
+        //$this->imprimirTicket($curso);
         return view("cursos.show",['curso' => $curso]);
     }
 
@@ -44,7 +43,7 @@ class CursoController extends Controller
     public function update(StoreCurso $request, Curso $curso){
 
         $curso->update($request->all());
-        $this->imprimirTicket($curso);
+        
         return redirect()->route('cursos.show', $curso);
     }
 
@@ -55,15 +54,15 @@ class CursoController extends Controller
     }
 
     public function imprimirTicket(Curso $curso){//imprimir ticket de prueba con impresora termica
-
+        
         $nombreImpresora = "EPSON TM-T20II Receipt";
 
         $conector = new WindowsPrintConnector($nombreImpresora);
         $impresora = new Printer($conector);
-        //dd($curso->name, "Enseñanza con ñ y Programación con acento en la ó");
-            $impresora->setJustification(Printer::JUSTIFY_CENTER);
+        
+        $impresora->setJustification(Printer::JUSTIFY_CENTER);
             $impresora->setFont(Printer::FONT_B);
-        $impresora->text("_ _ _ _ _ _ _ _ _ _ _ _ _ Tıcketera _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");//63 caracteres para font B
+        $impresora->text("_ _ _ _ _ _ _ _ _ _ _ _ _ Ticketera _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");//63 caracteres para font B
             $impresora->setJustification(Printer::JUSTIFY_LEFT);
             $impresora->setEmphasis(true);
         $impresora->text("Curso:       ");
@@ -82,6 +81,8 @@ class CursoController extends Controller
         $impresora->text("https://internet-facilito.blogspot.com\n");
             $impresora->cut();
             $impresora->close();
+
+            return redirect()->route('cursos.show', $curso);
 
     }
 
