@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
 use App\Http\Requests\StoreCurso;
+use Mike42\Escpos\CapabilityProfile;
 
 class CursoController extends Controller
 {
@@ -53,13 +54,13 @@ class CursoController extends Controller
         return redirect()->route('cursos.index');
     }
 
-
     public function imprimirTicket(Curso $curso){//imprimir ticket de prueba con impresora termica
 
         $nombreImpresora = "EPSON TM-T20II Receipt";
+
         $conector = new WindowsPrintConnector($nombreImpresora);
         $impresora = new Printer($conector);
-        
+        //dd($curso->name, "Enseñanza con ñ y Programación con acento en la ó");
             $impresora->setJustification(Printer::JUSTIFY_CENTER);
             $impresora->setFont(Printer::FONT_B);
         $impresora->text("_ _ _ _ _ _ _ _ _ _ _ _ _ Tıcketera _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\n");//63 caracteres para font B
@@ -78,7 +79,7 @@ class CursoController extends Controller
         $impresora->text($curso->descripcion . "\n");
             $impresora->setJustification(Printer::JUSTIFY_CENTER);
         $impresora->text("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n");//63 caracteres para font B
-        $impresora->text("www.internet-facilito.blogspot.com\n");
+        $impresora->text("https://internet-facilito.blogspot.com\n");
             $impresora->cut();
             $impresora->close();
 
