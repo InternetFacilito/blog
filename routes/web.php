@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ContactanosController;
 use App\Http\Controllers\CursoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+
 
 Route::get('/', HomeController::class)->name('home');;
 /*
@@ -23,5 +25,7 @@ Route::resource('cursos', CursoController::class);//->parameters(['asignaturas'=
 
 Route::view('nosotros','nosotros')->name('nosotros');
 
-
 Route::get('cursos/{curso}/imprimirTicket',[ CursoController::class, 'imprimirTicket'])->name('cursos.imprimirTicket');
+
+Route::get('contactanos', [ContactanosController::class, 'index'])->name('contactanos.index');
+Route::post('contactanos', [ContactanosController::class, 'store'])->name('contactanos.store');
